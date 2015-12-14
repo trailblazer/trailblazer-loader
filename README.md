@@ -1,9 +1,22 @@
 # Trailblazer::Loader
 
+## Experimental!
+
+Note that this is not the finalized version of `trailblazer-loader`. We still need more input from you.
+
+Expect many minor version bumps.
 
 ## Loading order
 
-Per concept.
+Per concept. Lexically sorted. Then, sorted by depths, as follows.
+
+```
+app/concepts/blog/operation.rb
+app/concepts/comment/operation.rb
+app/concepts/post/operation.rb
+app/concepts/api/v1/comment/operation.rb
+app/concepts/api/v1/post/operation.rb
+```
 
 1. Model. The model does not have dependencies to other layers. If it does, you're doing it wrong.
 2. Policy
@@ -20,6 +33,12 @@ Add this line to your application's Gemfile:
 
 ```ruby
 gem 'trailblazer-loader'
+```
+
+## API
+
+```ruby
+Trailblazer::Loader.new.(Rails.app.root) { |file| require_dependency(file) }
 ```
 
 

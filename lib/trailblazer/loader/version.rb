@@ -1,5 +1,5 @@
 module Trailblazer
-  module Loader
-    VERSION = "0.1.0"
+  class Loader
+    VERSION = "0.0.1"
   end
 end
