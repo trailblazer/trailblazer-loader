@@ -36,7 +36,7 @@ module Trailblazer
         yield "#{app_root}/#{f}" if File.exists?("#{app_root}/#{f}.rb")
 
         if Dir.exists?(f)
-            Dir.glob("#{f}/**/*.rb").each do |operation|
+            Dir.glob("#{app_root}/#{f}/**/*.rb").each do |operation|
               yield operation.chomp('.rb')
             end
         end
