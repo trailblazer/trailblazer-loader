@@ -1,4 +1,5 @@
 require "trailblazer/loader/version"
+require "representable/pipeline"
 
 module Trailblazer
   class Loader
