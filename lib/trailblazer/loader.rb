@@ -4,38 +4,44 @@ module Trailblazer
   class Loader
     # Please note that this is subject to change - we're still finding out the best way
     # to explicitly load files.
-    def call(app_root)
-      operations = Dir.glob("app/concepts/**/operation.rb").sort { |a, b| a.split("/").size <=> b.split("/").size }
-      # lame heuristic, but works for me: sort by nested levels.
-      # app/concepts/comment
-      # app/concepts/api/v1/comment
+    #
+    # NOTE: i will most probably use call_sheet and dry-container here soon.
+    def call(options={}, &block)
+      options[:concepts_root] ||= "app/concepts/"
 
+      pipeline = options[:pipeline] || Representable::Pipeline[
+        FindConcepts,
+        SortConcepts,
+        Representable::Collect[ConceptName, ConceptFiles] # per concept.
+      ]
 
-
-      operations.each do |f|
-        path  = f.sub("app/concepts/", "")
-        model = path.sub("/operation.rb", "")
-
-        concept = model # comment, api/v1/comment, ...
-
-        puts "digging through #{concept}"
-
-        puts "@@@@@---> #{app_root}/app/models/#{model}" unless File.exist?("#{app_root}/app/models/#{model}.rb")
-
-        # app/models/ # FIXME: where's the namespace here?
-        yield "#{app_root}/app/models/#{model}" if File.exist?("#{app_root}/app/models/#{model}.rb") # load the model file, first (thing.rb).
-
-
-        [:contract, :representer, :callback, :cell, :policy].each do |asset|
-          file = "#{app_root}/app/concepts/#{concept}/#{asset}"
-          puts "loading extension... #{file.inspect}"
-          yield file if File.exist?("#{file}.rb") # load the model file, first (thing.rb).
-        end
-
-
-        # concepts/:namespace/operation.rb
-        yield "#{app_root}/#{f}" # load app/concepts/{concept}/crud.rb (Thing::Create, Thing::Update, and so on).
+      if args = options[:insert] # FIXME: this only implements a sub-set.
+        # pipeline = Representable::Pipeline::Insert.(pipeline, *args) # FIXME: implement :before in Pipeline.
+        pipeline[2].insert(pipeline[2].index(args.last[:before]), args.first)
       end
+
+      files =  pipeline.([], options).flatten
+
+      # require "pp"
+      # pp files
+
+      load_files(files, &block)
+    end
+
+    FindConcepts  = ->(input, options) { Dir.glob("#{options[:concepts_root]}**/") }
+    # lame heuristic, but works for me: sort by nested levels.
+    # app/concepts/comment
+    # app/concepts/api/v1/comment
+    SortConcepts  = ->(input, options) { input.sort { |a, b| a.split("/").size <=> b.split("/").size } }
+    # Extract concept name from path, e.g. /api/v1/comment.
+    ConceptName   = ->(input, options) { options[:name] = input.sub(options[:concepts_root], "").chomp("/"); [] }
+    # Find all .rb files in one particular concept directory, e.g. as in /concepts/comment/*.rb.
+    ConceptFiles  = ->(input, options) { input += Dir.glob("#{options[:concepts_root]}#{options[:name]}/*.rb") }
+
+  private
+
+    def load_files(files)
+      files.each { |file| yield file }
     end
   end
 end
