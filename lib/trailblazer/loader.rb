@@ -34,6 +34,12 @@ module Trailblazer
 
         # concepts/:namespace/operation.rb
         yield "#{app_root}/#{f}" if File.exists?("#{app_root}/#{f}.rb")
+
+        if Dir.exists?(f)
+            Dir.glob("#{f}/**/*.rb").each do |operation|
+              yield operation.chomp('.rb')
+            end
+        end
       end
     end
   end
