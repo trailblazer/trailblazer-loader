@@ -233,6 +233,21 @@ module Comment::Operation
 
 ## Debugging
 
+TODO: document PrintFiles
+
+Booting your app fails because the loading order is incorrect? This happens, as we can't cover every possible combination.
+
+In any case, you can use `require` or `require_relative` and load files manually in the file depending on a specific class.
+
+For example, say you derive in another order and you're using the explicit layout.
+
+```ruby
+require_relative "update.rb"
+class Comment::Create < Comment::Update
+```
+
+Instead of painfully reconfiguring, require explicitly and save yourself a lot of pain. BTW, that's how every other programming language does dependency management and even [Matz is not too happy about autoloading anymore](https://twitter.com/yukihiro_matz/status/676170870226706432).
+
 ## Customizing
 
 Trailblazer-loader allows you to inject your own sorting and filtering logic, should you refuse to go mainstream.
