@@ -1,3 +1,7 @@
+# 0.0.4
+
+* Fix loading for explicit layouts.
+
 # 0.0.3
 
 * Bump to Representable 2.4.0 as we use `Pipeline::Collect`. This doesn't mean this dependency will last forever. We might switch to `call_sheet` for pipelines.
