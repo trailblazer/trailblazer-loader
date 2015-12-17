@@ -115,7 +115,7 @@ app
 │   │   ├── contracts
 │   │   │   ├── create.rb
 │   │   │   └── update.rb
-│   │   ├── operation
+│   │   ├── operations
 │   │   │   ├── create.rb
 │   │   │   └── update.rb
 │   │   ├── admin
