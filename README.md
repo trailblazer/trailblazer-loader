@@ -1,5 +1,13 @@
 # Trailblazer::Loader
 
+_Generic loader for Trailblazer projects._
+
+ Reportedly works with Rails, Grape, Lotus, and Roda, and many more, for sure.
+
+**Rails users**: This gem is bundled with [trailblazer-rails](https://github.com/trailblazer/trailblazer-rails).
+
+## Overview
+
 While Trailblazer enforces a new file structure where you organize by concept, and not by technology, the naming and the structuring within each concept allows different styles.
 
 Trailblazer-loader supports the following directory layouts concurrently.
@@ -164,6 +172,29 @@ Here's a sample of a explicit-singular session.
 ]
 ```
 
+## Installation
+
+Add this line to your application's Gemfile:
+
+```ruby
+gem 'trailblazer-loader'
+```
+
+You do not need this step should you use one of the following binding gems.
+
+* [trailblazer-rails](https://github.com/trailblazer/trailblazer-rails)
+* [trailblazer-grape](https://github.com/trailblazer/trailblazer-grape)
+* [trailblazer-roda](https://github.com/trailblazer/trailblazer-roda)
+* [trailblazer-lotus](https://github.com/trailblazer/trailblazer-lotus)
+
+## API
+
+```ruby
+Trailblazer::Loader.new.() { |file| require_dependency(File.join(Rails.app.root, file)) }
+```
+
+`:concepts_root`
+
 ## Mixing
 
 Note that you're free to mix these styles the way it feels right for your project.
@@ -206,19 +237,3 @@ module Comment::Operation
 
 Trailblazer-loader allows you to inject your own sorting and filtering logic, should you refuse to go mainstream.
 
-
-## Installation
-
-Add this line to your application's Gemfile:
-
-```ruby
-gem 'trailblazer-loader'
-```
-
-## API
-
-```ruby
-Trailblazer::Loader.new.() { |file| require_dependency(File.join(Rails.app.root, file)) }
-```
-
-`:concepts_root`
