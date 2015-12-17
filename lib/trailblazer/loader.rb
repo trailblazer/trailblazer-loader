@@ -1,5 +1,6 @@
 require "trailblazer/loader/version"
 require "representable/pipeline"
+require "pp"
 
 module Trailblazer
   class Loader
@@ -26,7 +27,6 @@ module Trailblazer
 
       files =  pipeline.([], options).flatten
 
-      require "pp"
       pp files
 
       load_files(files, &block)
@@ -55,15 +55,9 @@ module Trailblazer
     end
 
     # operation files should be loaded after callbacks, policies, and the like: [callback.rb, contract.rb, policy.rb, operation.rb]
-    require "pp"
-    SortOperationLast = ->(input, options) {
-      # pp input
-
-    input.sort { |a, b| (a =~ /operation/ && b !~ /operation/) ? 1 : -1 } }
+    SortOperationLast = ->(input, options) { input.sort { |a, b| (a =~ /operation/ && b !~ /operation/) ? 1 : -1 } }
     SortCreateFirst   = ->(input, options) { input.sort }
-    AddConceptFiles   = ->(input, options) {
-      pp input
-      input }
+    AddConceptFiles   = ->(input, options) { input }
 
 
   private
