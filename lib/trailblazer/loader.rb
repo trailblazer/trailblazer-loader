@@ -48,11 +48,11 @@ module Trailblazer
     # Extract concept name from path, e.g. /api/v1/comment.
     ConceptName   = ->(input, options) { options[:name] = input.sub(options[:concepts_root], "").chomp("/"); [] }
     # Find all .rb files in one particular concept directory, e.g. as in /concepts/comment/*.rb.
-    ConceptFiles  = ->(input, options) {
-      i = Dir.glob("#{options[:concepts_root]}#{options[:name]}/*.rb") +
-        Dir.glob("#{options[:concepts_root]}#{options[:name]}/*/*.rb")
-
-      ; puts "    files: #{i.inspect}"; i }
+    ConceptFiles  = ->(input, options) do
+      Dir.glob("#{options[:concepts_root]}#{options[:name]}/*.rb") +        # .rb files directly in this concept.
+        Dir.glob("#{options[:concepts_root]}#{options[:name]}/*/*.rb").     # .rb in :concept/operation/*.rb
+        find_all { |file| file =~ /(#{options[:concept_dirs].join("|")})/ } # but only those, no sub-concepts!
+    end
 
     # operation files should be loaded after callbacks, policies, and the like: [callback.rb, contract.rb, policy.rb, operation.rb]
     require "pp"
