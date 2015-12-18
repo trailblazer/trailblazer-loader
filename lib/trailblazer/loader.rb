@@ -1,5 +1,4 @@
 require "trailblazer/loader/version"
-require "representable/pipeline"
 require "pp"
 
 module Trailblazer
@@ -12,12 +11,12 @@ module Trailblazer
       options[:concepts_root] ||= "app/concepts/"
       options[:concept_dirs] = concept_dirs
 
-      pipeline = options[:pipeline] || Representable::Pipeline[
+      pipeline = options[:pipeline] || Pipeline[
         FindDirectories,
         FindConcepts,
         # PrintConcepts,
         SortByLevel,
-        Representable::Collect[ConceptName, ConceptFiles, SortCreateFirst, SortOperationLast, AddConceptFiles] # per concept.
+        Pipeline::Collect[ConceptName, ConceptFiles, SortCreateFirst, SortOperationLast, AddConceptFiles] # per concept.
       ]
 
       if args = options[:insert] # FIXME: this only implements a sub-set.
@@ -67,3 +66,5 @@ module Trailblazer
     end
   end
 end
+
+require "trailblazer/loader/pipeline"
