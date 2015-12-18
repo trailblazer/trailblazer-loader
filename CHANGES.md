@@ -1,3 +1,7 @@
+# 0.0.5
+
+* Remove `representable` dependency. This is a temporary fix until we have a pipelining gem.
+
 # 0.0.4
 
 * Fix loading for explicit layouts.
