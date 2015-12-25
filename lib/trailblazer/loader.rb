@@ -48,6 +48,8 @@ module Trailblazer
     ConceptName   = ->(input, options) { options[:name] = input.sub(options[:concepts_root], "").chomp("/"); [] }
     # Find all .rb files in one particular concept directory, e.g. as in /concepts/comment/*.rb.
     ConceptFiles  = ->(input, options) do
+      input + # allow injecting other dependencies, e.g. app/models/comment.rb.
+
       Dir.glob("#{options[:concepts_root]}#{options[:name]}/*.rb") +        # .rb files directly in this concept.
         Dir.glob("#{options[:concepts_root]}#{options[:name]}/*/*.rb").     # .rb in :concept/operation/*.rb
         find_all { |file| file =~ /(#{options[:concept_dirs].join("|")})/ } # but only those, no sub-concepts!
@@ -57,7 +59,6 @@ module Trailblazer
     SortOperationLast = ->(input, options) { input.sort { |a, b| (a =~ /operation/ && b !~ /operation/) ? 1 : -1 } }
     SortCreateFirst   = ->(input, options) { input.sort }
     AddConceptFiles   = ->(input, options) { input }
-
 
   private
 
