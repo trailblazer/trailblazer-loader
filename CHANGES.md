@@ -1,3 +1,7 @@
+# 0.0.6
+
+* Allow injection of additional files in `Loader::ConceptFiles` from earlier functions.
+
 # 0.0.5
 
 * Remove `representable` dependency. This is a temporary fix until we have a pipelining gem.
