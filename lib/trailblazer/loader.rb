@@ -14,19 +14,18 @@ module Trailblazer
       pipeline = options[:pipeline] || Pipeline[
         FindDirectories,
         FindConcepts,
-        # PrintConcepts,
         SortByLevel,
         Pipeline::Collect[ConceptName, ConceptFiles, SortCreateFirst, SortOperationLast, AddConceptFiles] # per concept.
       ]
 
       if args = options[:insert] # FIXME: this only implements a sub-set.
         # pipeline = Representable::Pipeline::Insert.(pipeline, *args) # FIXME: implement :before in Pipeline.
-        pipeline[3].insert(pipeline[3].index(args.last[:before]), args.first)
+        pipeline.last.insert(pipeline.last.index(args.last[:before]), args.first)
       end
 
       files =  pipeline.([], options).flatten
 
-      pp files
+      pp files if ENV['RACK_ENV'] == 'development'
 
       load_files(files, &block)
     end
@@ -56,8 +55,8 @@ module Trailblazer
     end
 
     # operation files should be loaded after callbacks, policies, and the like: [callback.rb, contract.rb, policy.rb, operation.rb]
-    SortOperationLast = ->(input, options) { input.sort { |a, b| (a =~ /operation/ && b !~ /operation/) ? 1 : -1 } }
-    SortCreateFirst   = ->(input, options) { input.sort }
+    SortOperationLast = ->(input, options) {input.sort { |a, b| a=~ /operation/ && b !~ /operation/ ? 1 : a !~ /operation/ && b =~ /operation/ ? 0 : a <=> b  } }
+    SortCreateFirst   = ->(input, options) {input.sort }
     AddConceptFiles   = ->(input, options) { input }
 
   private
