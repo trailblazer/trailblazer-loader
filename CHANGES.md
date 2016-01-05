@@ -1,3 +1,7 @@
+# 0.0.7
+
+* Fix a ordering bug. Thanks @Hermanverschooten.
+
 # 0.0.6
 
 * Allow injection of additional files in `Loader::ConceptFiles` from earlier functions.
