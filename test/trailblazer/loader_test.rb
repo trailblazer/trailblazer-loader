@@ -43,4 +43,41 @@ class Trailblazer::LoaderTest < Minitest::Test
 
     assert_equal expected, result
   end
+
+  def test_ordering_mac_osx
+    input = [
+      "app/models/user.rb",
+      "app/concepts/user/callback.rb",
+      "app/concepts/user/policy.rb",
+      "app/concepts/user/scope.rb",
+      "app/concepts/user/cell/row.rb",
+      "app/concepts/user/cell/table.rb",
+      "app/concepts/user/contract/create.rb",
+      "app/concepts/user/contract/update.rb",
+      "app/concepts/user/operation/create.rb",
+      "app/concepts/user/operation/index.rb",
+      "app/concepts/user/operation/show.rb",
+      "app/concepts/user/operation/update.rb"
+    ]
+
+    expected = [
+      "app/concepts/user/callback.rb",
+      "app/concepts/user/cell/row.rb",
+      "app/concepts/user/cell/table.rb",
+      "app/concepts/user/contract/create.rb",
+      "app/concepts/user/contract/update.rb",
+      "app/concepts/user/policy.rb",
+      "app/concepts/user/scope.rb",
+      "app/models/user.rb",
+      "app/concepts/user/operation/create.rb",
+      "app/concepts/user/operation/index.rb",
+      "app/concepts/user/operation/show.rb",
+      "app/concepts/user/operation/update.rb"
+    ]
+
+    input = ::Trailblazer::Loader::SortCreateFirst.(input, {})
+    result = ::Trailblazer::Loader::SortOperationLast.(input, {})
+
+    assert_equal expected, result
+  end
 end
