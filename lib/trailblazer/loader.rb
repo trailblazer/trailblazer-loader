@@ -25,12 +25,12 @@ module Trailblazer
 
       files =  pipeline.([], options).flatten
 
-      debug(options)
+      debug(files, options)
 
       load_files(files, &block)
     end
 
-    def debug(options)
+    def debug(files, options)
       pp files if options[:debug]
     end
 
