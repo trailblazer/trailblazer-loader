@@ -25,9 +25,13 @@ module Trailblazer
 
       files =  pipeline.([], options).flatten
 
-      pp files if ENV['RACK_ENV'] == 'development'
+      debug(options)
 
       load_files(files, &block)
+    end
+
+    def debug(options)
+      pp files if options[:debug]
     end
 
     def concept_dirs
