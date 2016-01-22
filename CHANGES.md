@@ -1,3 +1,7 @@
+# 0.0.9
+
+* Bug fix :cough:.
+
 # 0.0.8
 
 * Add `debug: true` option instead of relying on env vars.
