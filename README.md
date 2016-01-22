@@ -233,6 +233,14 @@ module Comment::Operation
 
 ## Debugging
 
+Turn on debugging as follows.
+
+```ruby
+Trailblazer::Loader.new.(debug: true) { |file| require_relative("../#{file}") }
+```
+
+This will print the file list before requiring them.
+
 TODO: document PrintFiles
 
 Booting your app fails because the loading order is incorrect? This happens, as we can't cover every possible combination.

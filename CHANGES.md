@@ -1,3 +1,7 @@
+# 0.0.8
+
+* Add `debug: true` option instead of relying on env vars.
+
 # 0.0.7
 
 * Fix a ordering bug. Thanks @Hermanverschooten.
