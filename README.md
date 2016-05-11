@@ -196,7 +196,7 @@ Trailblazer::Loader.new.() { |file| require_dependency(File.join(Rails.app.root,
 Per default, Trailblazer-loader will use `app/concepts` as the root path for the file search. Change that with the `:concepts_root` option.
 
 ```ruby
-Trailblazer::Loader.new.(concepts_root: "./concepts/") { |file| require_relative(f) }
+Trailblazer::Loader.new.(concepts_root: "./concepts/") { |file| require_relative(file) }
 ```
 
 Note that `:concepts_root` needs a trailing slash.
