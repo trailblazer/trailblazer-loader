@@ -43,4 +43,25 @@ class Trailblazer::LoaderTest < Minitest::Test
 
     assert_equal expected, result
   end
+
+  def test_naming
+    opts = {
+      concept_dirs: %w{ callback cell contract operation policy representer view },
+      concepts_root: "app/concepts"
+    }
+    input = [
+      "",
+      "app/concepts/foo_review/operation/update.rb",
+      "app/concepts/policy/operation/update.rb",
+      "app/concepts/review/cell/index.rb",
+      "app/concepts/order/cell/part.rb"
+    ]
+    expected = [
+      "app/concepts/foo_review/operation/update.rb",
+      "app/concepts/review/cell/index.rb",
+      "app/concepts/order/cell/part.rb"
+    ]
+    result = ::Trailblazer::Loader::FindConcepts.(input, opts)
+    assert_equal expected, result
+  end
 end
