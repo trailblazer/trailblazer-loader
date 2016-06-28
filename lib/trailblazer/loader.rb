@@ -39,8 +39,8 @@ module Trailblazer
     end
 
     FindDirectories  = ->(input, options) { Dir.glob("#{options[:concepts_root]}**/") }
-    # Filter out all directories containing /(callback|cell|contract|operation|policy|representer|view)/
-    FindConcepts     = ->(input, options) { input.shift; input.reject { |dir| dir =~ /(#{options[:concept_dirs].join("|")})/ } }
+    # Filter out all directories matching /(callback|cell|contract|operation|policy|representer|view)s?/
+    FindConcepts     = ->(input, options) { input.shift; input.reject { |dir| dir =~ /^(#{options[:concept_dirs].join("|")})s?$/ } }
     PrintConcepts    = ->(input, options) { puts "  concepts: #{input.inspect}"; input }
 
     # lame heuristic, but works for me: sort by directory levels.
@@ -55,7 +55,7 @@ module Trailblazer
 
       Dir.glob("#{options[:concepts_root]}#{options[:name]}/*.rb") +        # .rb files directly in this concept.
         Dir.glob("#{options[:concepts_root]}#{options[:name]}/*/*.rb").     # .rb in :concept/operation/*.rb
-        find_all { |file| file =~ /(#{options[:concept_dirs].join("|")})/ } # but only those, no sub-concepts!
+        find_all { |file| file =~ /^(#{options[:concept_dirs].join("|")})s?$/ } # but only those, no sub-concepts!
     end
 
     # operation files should be loaded after callbacks, policies, and the like: [callback.rb, contract.rb, policy.rb, operation.rb]
