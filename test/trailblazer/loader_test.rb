@@ -1,7 +1,7 @@
 require 'test_helper'
 
 class Trailblazer::LoaderTest < Minitest::Test
-  def test_that_it_has_a_version_number
+  def test_it_has_a_version_number
     refute_nil ::Trailblazer::Loader::VERSION
   end
 
@@ -19,7 +19,8 @@ class Trailblazer::LoaderTest < Minitest::Test
       "app/concepts/order/contract/update.rb",
       "app/concepts/order/contract/create.rb",
       "app/concepts/order/operation/from_traject.rb",
-      "app/concepts/order/operation/create.rb"
+      "app/concepts/order/operation/create.rb",
+      "app/concepts/contractor/operation.rb"
     ]
 
     expected = [
@@ -31,11 +32,12 @@ class Trailblazer::LoaderTest < Minitest::Test
       "app/concepts/order/contract/create.rb",
       "app/concepts/order/contract/update.rb",
       "app/concepts/order/policy.rb",
+      "app/concepts/contractor/operation.rb",
       "app/concepts/order/operation/create.rb",
       "app/concepts/order/operation/from_traject.rb",
       "app/concepts/order/operation/index.rb",
       "app/concepts/order/operation/search.rb",
-      "app/concepts/order/operation/update.rb"
+      "app/concepts/order/operation/update.rb",
     ]
 
     input = ::Trailblazer::Loader::SortCreateFirst.(input, {})

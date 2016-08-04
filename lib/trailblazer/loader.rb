@@ -40,13 +40,13 @@ module Trailblazer
 
     FindDirectories  = ->(input, options) { Dir.glob("#{options[:concepts_root]}**/") }
     # Filter out all directories containing /(callback|cell|contract|operation|policy|representer|view)/
-    FindConcepts     = ->(input, options) { input.shift; input.reject { |dir| dir =~ /(#{options[:concept_dirs].join("|")})/ } }
+    FindConcepts     = ->(input, options) { input.reject { (dir.split(File::SEPARATOR) & options[:concept_dirs]).any? } }
     PrintConcepts    = ->(input, options) { puts "  concepts: #{input.inspect}"; input }
 
     # lame heuristic, but works for me: sort by directory levels.
     # app/concepts/comment
     # app/concepts/api/v1/comment
-    SortByLevel  = ->(input, options) { input.sort { |a, b| a.split("/").size <=> b.split("/").size } }
+    SortByLevel  = ->(input, options) { input.sort { |a, b| a.split(File::SEPARATOR).size <=> b.split(File::SEPARATOR).size } }
     # Extract concept name from path, e.g. /api/v1/comment.
     ConceptName   = ->(input, options) { options[:name] = input.sub(options[:concepts_root], "").chomp("/"); [] }
     # Find all .rb files in one particular concept directory, e.g. as in /concepts/comment/*.rb.
