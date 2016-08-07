@@ -3,13 +3,16 @@ require "pp"
 
 module Trailblazer
   class Loader
+
+    DEFAULT_CONCEPT_DIRS = %w{ callback cell contract operation policy representer view
+                               callbacks cells contracts operations policies representers views }
     # Please note that this is subject to change - we're still finding out the best way
     # to explicitly load files.
     #
     # NOTE: i will most probably use call_sheet and dry-container here soon.
     def call(options={}, &block)
       options[:concepts_root] ||= "app/concepts/"
-      options[:concept_dirs] = concept_dirs
+      options[:concept_dirs] ||= DEFAULT_CONCEPT_DIRS
 
       pipeline = options[:pipeline] || Pipeline[
         FindDirectories,
@@ -18,7 +21,7 @@ module Trailblazer
         Pipeline::Collect[ConceptName, ConceptFiles, SortCreateFirst, SortOperationLast, AddConceptFiles] # per concept.
       ]
 
-      if args = options[:insert] # FIXME: this only implements a sub-set.
+      if (args = options[:insert]) # FIXME: this only implements a sub-set.
         # pipeline = Representable::Pipeline::Insert.(pipeline, *args) # FIXME: implement :before in Pipeline.
         pipeline.last.insert(pipeline.last.index(args.last[:before]), args.first)
       end
@@ -32,10 +35,6 @@ module Trailblazer
 
     def debug(files, options)
       pp files if options[:debug]
-    end
-
-    def concept_dirs
-      %w{ callback cell contract operation policy representer view }
     end
 
     FindDirectories  = ->(input, options) { Dir.glob("#{options[:concepts_root]}**/") }
@@ -55,7 +54,7 @@ module Trailblazer
 
       Dir.glob("#{options[:concepts_root]}#{options[:name]}/*.rb") +        # .rb files directly in this concept.
         Dir.glob("#{options[:concepts_root]}#{options[:name]}/*/*.rb").     # .rb in :concept/operation/*.rb
-        find_all { |file| file =~ /(#{options[:concept_dirs].join("|")})/ } # but only those, no sub-concepts!
+        find_all { |file| (file.split(File::SEPARATOR) & options[:concept_dirs]).any? } # but only those, no sub-concepts!
     end
 
     # operation files should be loaded after callbacks, policies, and the like: [callback.rb, contract.rb, policy.rb, operation.rb]
