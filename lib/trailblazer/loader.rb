@@ -4,15 +4,18 @@ require "pp"
 module Trailblazer
   class Loader
 
-    DEFAULT_CONCEPT_DIRS = %w{ callback cell contract operation policy representer view
-                               callbacks cells contracts operations policies representers views }
+    def concept_dirs
+      %w{ callback  cell  contract  operation  policy   representer  view
+          callbacks cells contracts operations policies representers views }
+    end
+
     # Please note that this is subject to change - we're still finding out the best way
     # to explicitly load files.
     #
     # NOTE: i will most probably use call_sheet and dry-container here soon.
     def call(options={}, &block)
       options[:concepts_root] ||= "app/concepts/"
-      options[:concept_dirs] ||= DEFAULT_CONCEPT_DIRS
+      options[:concept_dirs]  ||= concept_dirs
 
       pipeline = options[:pipeline] || Pipeline[
         FindDirectories,
