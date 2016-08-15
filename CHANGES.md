@@ -1,7 +1,7 @@
 # 0.1.0
 
 * Use `File::SEPARATOR` for filename operations.
-* Don't use a regexp anymore to find concept files, but `Loader::DEFAULT_CONCEPT_DIRS` which includes plural names.
+* Don't use a regexp anymore to find concept files, but `Loader#concept_dirs` which includes plural names.
 * Allow irregular directory names such as `policies`.
 
 # 0.0.9

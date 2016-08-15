@@ -42,7 +42,7 @@ module Trailblazer
 
     FindDirectories  = ->(input, options) { Dir.glob("#{options[:concepts_root]}**/") }
     # Filter out all directories containing /(callback|cell|contract|operation|policy|representer|view)/
-    FindConcepts     = ->(input, options) { input.reject { (dir.split(File::SEPARATOR) & options[:concept_dirs]).any? } }
+    FindConcepts     = ->(input, options) { input.reject { |dir| (dir.split(File::SEPARATOR) & options[:concept_dirs]).any? } }
     PrintConcepts    = ->(input, options) { puts "  concepts: #{input.inspect}"; input }
 
     # lame heuristic, but works for me: sort by directory levels.
