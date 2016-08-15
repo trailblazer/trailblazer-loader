@@ -24,7 +24,7 @@ module Trailblazer
         Pipeline::Collect[ConceptName, ConceptFiles, SortCreateFirst, SortOperationLast, AddConceptFiles] # per concept.
       ]
 
-      if (args = options[:insert]) # FIXME: this only implements a sub-set.
+      if args = options[:insert] # FIXME: this only implements a sub-set.
         # pipeline = Representable::Pipeline::Insert.(pipeline, *args) # FIXME: implement :before in Pipeline.
         pipeline.last.insert(pipeline.last.index(args.last[:before]), args.first)
       end
