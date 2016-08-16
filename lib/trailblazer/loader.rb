@@ -25,7 +25,12 @@ module Trailblazer
 
       if args = options[:insert] # FIXME: this only implements a sub-set.
         # pipeline = Representable::Pipeline::Insert.(pipeline, *args) # FIXME: implement :before in Pipeline.
-        pipeline.last.insert(pipeline.last.index(args.last[:before]), args.first)
+
+        if options[:_fixme]
+          pipeline << args.first
+        else
+          pipeline.last.insert(pipeline.last.index(args.last[:before]), args.first)
+        end
       end
 
       files =  pipeline.([], options).flatten
@@ -64,6 +69,8 @@ module Trailblazer
     SortCreateFirst   = ->(input, options) { input.sort }
     AddConceptFiles   = ->(input, options) { input }
 
+
+    # FindRbFiles       = ->(input, options) { input + Dir.glob("#{options[:concepts_root]}#{options[:name]}/*.rb") }
   private
 
     def load_files(files)
