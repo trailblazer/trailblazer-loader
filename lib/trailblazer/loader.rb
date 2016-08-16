@@ -11,10 +11,9 @@ module Trailblazer
 
     # Please note that this is subject to change - we're still finding out the best way
     # to explicitly load files.
-    #
-    # NOTE: i will most probably use call_sheet and dry-container here soon.
     def call(options={}, &block)
-      options[:concepts_root] ||= "app/concepts/"
+      options[:root]          ||= "."
+      options[:concepts_root] ||= "#{options[:root]}/app/concepts/"
       options[:concept_dirs]  ||= concept_dirs
 
       pipeline = options[:pipeline] || Pipeline[

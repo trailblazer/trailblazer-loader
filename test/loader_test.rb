@@ -1,11 +1,14 @@
 require 'test_helper'
 
-class Trailblazer::LoaderTest < Minitest::Test
-  def test_it_has_a_version_number
-    refute_nil ::Trailblazer::Loader::VERSION
+class Trailblazer::LoaderTest < Minitest::Spec
+  it "#call" do
+    loaded = []
+    Trailblazer::Loader.new.(root: "#{Dir.pwd}/test", debug: true) { |f| loaded << f }
+
+    loaded.must_equal ["/home/nick/projects/trailblazer-loader/test/app/concepts/song/operation/create.rb"]
   end
 
-  def test_ordering
+  it do
     input = [
       "app/concepts/order/cell/index.rb",
       "app/concepts/order/operation/update.rb",
@@ -43,6 +46,6 @@ class Trailblazer::LoaderTest < Minitest::Test
     input = ::Trailblazer::Loader::SortCreateFirst.(input, {})
     result = ::Trailblazer::Loader::SortOperationLast.(input, {})
 
-    assert_equal expected, result
+    result.must_equal expected
   end
 end

@@ -1,5 +1,7 @@
 # 0.1.0
 
+* New option `:root` to allow using loader for sources other than the current directory, e.g. for gems or Rails engines.
+* `:concept_root` is now prefixed with `:root`.
 * Use `File::SEPARATOR` for filename operations.
 * Don't use a regexp anymore to find concept files, but `Loader#concept_dirs` which includes plural names.
 * Allow irregular directory names such as `policies`.
