@@ -5,6 +5,7 @@
 * Use `File::SEPARATOR` for filename operations.
 * Don't use a regexp anymore to find concept files, but `Loader#concept_dirs` which includes plural names.
 * Allow irregular directory names such as `policies`.
+* Allow prepending to the pipeline using `:prepend`. Note that this is a temporary API and will be removed.
 
 # 0.0.9
 
