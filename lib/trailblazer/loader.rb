@@ -25,12 +25,10 @@ module Trailblazer
 
       if args = options[:insert] # FIXME: this only implements a sub-set.
         # pipeline = Representable::Pipeline::Insert.(pipeline, *args) # FIXME: implement :before in Pipeline.
-
-        if options[:_fixme]
-          pipeline << args.first
-        else
-          pipeline.last.insert(pipeline.last.index(args.last[:before]), args.first)
-        end
+        pipeline.last.insert(pipeline.last.index(args.last[:before]), args.first)
+      end
+      if args = options[:prepend]
+        pipeline << args
       end
 
       files =  pipeline.([], options).flatten
