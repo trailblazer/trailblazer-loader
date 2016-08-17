@@ -5,7 +5,8 @@ class Trailblazer::LoaderTest < Minitest::Spec
     loaded = []
     Trailblazer::Loader.new.(root: "#{Dir.pwd}/test", debug: true) { |f| loaded << f }
 
-    loaded.must_equal ["/home/nick/projects/trailblazer-loader/test/app/concepts/song/operation/create.rb"]
+    loaded.must_equal ["/home/nick/projects/trailblazer-loader/test/app/concepts/song/operation/create.rb",
+      "/home/nick/projects/trailblazer-loader/test/app/concepts/song/query/index.rb"]
   end
 
   it do
