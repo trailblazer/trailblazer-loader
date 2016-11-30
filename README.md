@@ -266,3 +266,6 @@ Instead of painfully reconfiguring, require explicitly and save yourself a lot o
 
 Trailblazer-loader allows you to inject your own sorting and filtering logic, should you refuse to go mainstream.
 
+## License
+
+The gem is available as open source under the terms of the [MIT License](http://opensource.org/licenses/MIT).

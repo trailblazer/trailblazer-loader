@@ -8,6 +8,7 @@ Gem::Specification.new do |spec|
   spec.version       = Trailblazer::Loader::VERSION
   spec.authors       = ["Nick Sutterer"]
   spec.email         = ["apotonick@gmail.com"]
+  spec.license       = "MIT"
 
   spec.summary       = %q{bla}
   spec.description   = %q{TOD: Write a longer description or delete this line.}
