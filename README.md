@@ -190,7 +190,7 @@ You do not need this step should you use one of the following binding gems.
 ## API
 
 ```ruby
-Trailblazer::Loader.new.() { |file| require_dependency(File.join(Rails.app.root, file)) }
+Trailblazer::Loader.new.() { |file| require_dependency(File.join(Rails.application.root, file)) }
 ```
 
 Per default, Trailblazer-loader will use `app/concepts` as the root path for the file search. Change that with the `:concepts_root` option.
