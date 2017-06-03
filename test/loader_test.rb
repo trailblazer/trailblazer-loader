@@ -3,10 +3,12 @@ require 'test_helper'
 class Trailblazer::LoaderTest < Minitest::Spec
   it "#call" do
     loaded = []
-    Trailblazer::Loader.new.(root: "#{Dir.pwd}/test", debug: true) { |f| loaded << f }
+    Trailblazer::Loader.new.(root: "#{Dir.pwd}/test", debug: true) { |f| loaded << f.split("test/").last }
 
-    loaded.must_equal ["/home/nick/projects/trailblazer-loader/test/app/concepts/song/operation/create.rb",
-      "/home/nick/projects/trailblazer-loader/test/app/concepts/song/query/index.rb"]
+    loaded.must_equal [
+      "app/concepts/song/operation/create.rb",
+      "app/concepts/song/query/index.rb"
+    ]
   end
 
   it do
