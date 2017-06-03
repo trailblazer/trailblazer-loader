@@ -10,9 +10,9 @@ Gem::Specification.new do |spec|
   spec.email         = ["apotonick@gmail.com"]
   spec.license       = "MIT"
 
-  spec.summary       = %q{bla}
-  spec.description   = %q{TOD: Write a longer description or delete this line.}
-  spec.homepage      = "http://trailblazer.to/"
+  spec.summary       = %q{Loads all concepts files.}
+  spec.description   = %q{Loads all Trailblazer concepts files at startup.}
+  spec.homepage      = "http://trailblazer.to/gems/trailblazer/loader.html"
 
   spec.files         = `git ls-files -z`.split("\x0").reject { |f| f.match(%r{^(test|spec|features)/}) }
   spec.bindir        = "exe"
