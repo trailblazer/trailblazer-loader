@@ -63,7 +63,7 @@ module Trailblazer
     end
 
     # operation files should be loaded after callbacks, policies, and the like: [callback.rb, contract.rb, policy.rb, operation.rb]
-    SortOperationLast = ->(input, options) { input.sort { |a, b| a =~ /operation/ && b !~ /operation/ ? 1 : a !~ /operation/ && b =~ /operation/ ? 0 : a <=> b  } }
+    SortOperationLast = ->(input, options) { input.sort { |a, b| a =~ /operation/ && b !~ /operation/ ? 1 : a !~ /operation/ && b =~ /operation/ ? -1 : a <=> b  } }
     SortCreateFirst   = ->(input, options) { input.sort }
     AddConceptFiles   = ->(input, options) { input }
 
