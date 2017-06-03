@@ -1,3 +1,7 @@
+# 0.1.1
+
+* The loading order on OSX is now identical to Linux. Thanks to @pnikolov.
+
 # 0.1.0
 
 * New option `:root` to allow using loader for sources other than the current directory, e.g. for gems or Rails engines.
