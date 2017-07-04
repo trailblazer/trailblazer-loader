@@ -1,3 +1,8 @@
+# 0.1.2
+
+* Introduce `Loader#default_circuit` to override specific positions in the loading process. This is a bit hacky and will be
+refined in v1.0.
+
 # 0.1.1
 
 * The loading order on OSX is now identical to Linux. Thanks to @pnikolov.
