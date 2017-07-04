@@ -16,12 +16,7 @@ module Trailblazer
       options[:concepts_root] ||= "#{options[:root]}/app/concepts/"
       options[:concept_dirs]  ||= concept_dirs
 
-      pipeline = options[:pipeline] || Pipeline[
-        FindDirectories,
-        FindConcepts,
-        SortByLevel,
-        Pipeline::Collect[ConceptName, ConceptFiles, SortCreateFirst, SortOperationLast, AddConceptFiles] # per concept.
-      ]
+      pipeline = options[:pipeline] || default_circuit
 
       if args = options[:insert] # FIXME: this only implements a sub-set.
         # pipeline = Representable::Pipeline::Insert.(pipeline, *args) # FIXME: implement :before in Pipeline.
@@ -36,6 +31,15 @@ module Trailblazer
       debug(files, options)
 
       load_files(files, &block)
+    end
+
+    def default_circuit
+      Pipeline[
+        FindDirectories,
+        FindConcepts,
+        SortByLevel,
+        Pipeline::Collect[ConceptName, ConceptFiles, SortCreateFirst, SortOperationLast, AddConceptFiles] # per concept.
+      ]
     end
 
     def debug(files, options)
