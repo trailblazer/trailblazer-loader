@@ -1,56 +1,77 @@
 require "trailblazer/loader/version"
+require "trailblazer"
 require "pp"
 
 module Trailblazer
-  class Loader
-
-    def concept_dirs
+  class Loader < Trailblazer::Operation
+    CONCEPT_DIRS =
       %w{ callback  cell  contract  operation  policy   representer  view
           callbacks cells contracts operations policies representers views }
+    private_constant :CONCEPT_DIRS
+
+    step :options_setup
+    step :pipeline_setup!
+    step :insert!
+    step :prepend!
+    step :files
+    success :debug
+
+    def options_setup(options, *)
+      options[:root]          ||= "."
+      options[:concepts_root] ||= "#{options[:root]}/app/concepts/"
+      options[:concept_dirs]  ||= CONCEPT_DIRS
+    end
+
+    def pipeline_setup!(options, *)
+      return true if options[:pipeline]
+
+      options[:pipeline] = default_circuit
+    end
+
+    def insert!(options, *) # FIXME: this only implements a sub-set.
+      return true unless options[:insert]
+
+      # pipeline = Representable::Pipeline::Insert.(pipeline, *args) # FIXME: implement :before in Pipeline.
+      options[:pipeline].last.insert(pipeline.last.index(args.last[:before]), args.first)
+    end
+
+    def prepend!(options, *)
+      return true unless options[:prepend]
+
+      options[:pipeline] << args
     end
 
     # Please note that this is subject to change - we're still finding out the best way
     # to explicitly load files.
-    def call(options={}, &block)
-      options[:root]          ||= "."
-      options[:concepts_root] ||= "#{options[:root]}/app/concepts/"
-      options[:concept_dirs]  ||= concept_dirs
-
-      pipeline = options[:pipeline] || default_circuit
-
-      if args = options[:insert] # FIXME: this only implements a sub-set.
-        # pipeline = Representable::Pipeline::Insert.(pipeline, *args) # FIXME: implement :before in Pipeline.
-        pipeline.last.insert(pipeline.last.index(args.last[:before]), args.first)
-      end
-      if args = options[:prepend]
-        pipeline << args
-      end
-
-      files =  pipeline.([], options).flatten
-
-      debug(files, options)
-
-      load_files(files, &block)
+    def files(options, pipeline:, **)
+      options[:files] = pipeline.([], options).flatten
     end
 
+    def debug(options, files:, **)
+      return unless options[:debug]
+
+      pp files
+    end
+
+  private
     def default_circuit
       Pipeline[
         FindDirectories,
         FindConcepts,
         SortByLevel,
-        Pipeline::Collect[ConceptName, ConceptFiles, SortCreateFirst, SortOperationLast, AddConceptFiles] # per concept.
+        Pipeline::Collect[
+          ConceptName,
+          ConceptFiles,
+          SortCreateFirst,
+          SortOperationLast,
+          AddConceptFiles
+        ]# per concept.
       ]
-    end
-
-    def debug(files, options)
-      pp files if options[:debug]
     end
 
     FindDirectories  = ->(input, options) { Dir.glob("#{options[:concepts_root]}**/") }
     # Filter out all directories containing /(callback|cell|contract|operation|policy|representer|view)/
     FindConcepts     = ->(input, options) { input.reject { |dir| (dir.split(File::SEPARATOR) & options[:concept_dirs]).any? } }
-    PrintConcepts    = ->(input, options) { puts "  concepts: #{input.inspect}"; input }
-
     # lame heuristic, but works for me: sort by directory levels.
     # app/concepts/comment
     # app/concepts/api/v1/comment
@@ -65,19 +86,10 @@ module Trailblazer
         Dir.glob("#{options[:concepts_root]}#{options[:name]}/*/*.rb").     # .rb in :concept/operation/*.rb
         find_all { |file| (file.split(File::SEPARATOR) & options[:concept_dirs]).any? } # but only those, no sub-concepts!
     end
-
     # operation files should be loaded after callbacks, policies, and the like: [callback.rb, contract.rb, policy.rb, operation.rb]
     SortOperationLast = ->(input, options) { input.sort { |a, b| a =~ /operation/ && b !~ /operation/ ? 1 : a !~ /operation/ && b =~ /operation/ ? -1 : a <=> b  } }
     SortCreateFirst   = ->(input, options) { input.sort }
     AddConceptFiles   = ->(input, options) { input }
-
-
-    # FindRbFiles       = ->(input, options) { input + Dir.glob("#{options[:concepts_root]}#{options[:name]}/*.rb") }
-  private
-
-    def load_files(files)
-      files.each { |file| yield file }
-    end
   end
 end
 

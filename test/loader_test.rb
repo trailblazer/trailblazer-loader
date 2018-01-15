@@ -1,17 +1,19 @@
 require 'test_helper'
 
 class Trailblazer::LoaderTest < Minitest::Spec
-  it "#call" do
-    loaded = []
-    Trailblazer::Loader.new.(root: "#{Dir.pwd}/test", debug: true) { |f| loaded << f.split("test/").last }
+  it "loads from root correctly" do
+    loader = Trailblazer::Loader.({}, root: "#{Dir.pwd}/test", debug: true)
 
-    loaded.must_equal [
+    loader[:files].collect! { |f| f.split("test/").last }
+
+    loader[:files].must_equal [
       "app/concepts/song/operation/create.rb",
+      "app/concepts/song/operation/update.rb",
       "app/concepts/song/query/index.rb"
     ]
   end
 
-  it do
+  it 'sort operation correctly' do
     input = [
       "app/concepts/order/cell/index.rb",
       "app/concepts/order/operation/update.rb",
@@ -52,7 +54,7 @@ class Trailblazer::LoaderTest < Minitest::Spec
     result.must_equal expected
   end
 
-  def test_ordering_mac_osx
+  it 'ordering_mac_osx' do
     input = [
       "app/models/user.rb",
       "app/concepts/user/callback.rb",
@@ -82,6 +84,7 @@ class Trailblazer::LoaderTest < Minitest::Spec
       "app/concepts/user/operation/show.rb",
       "app/concepts/user/operation/update.rb"
     ]
+
 
     input = ::Trailblazer::Loader::SortCreateFirst.(input, {})
     result = ::Trailblazer::Loader::SortOperationLast.(input, {})
