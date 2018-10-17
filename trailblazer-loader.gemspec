@@ -8,7 +8,7 @@ Gem::Specification.new do |spec|
   spec.version       = Trailblazer::Loader::VERSION
   spec.authors       = ["Nick Sutterer"]
   spec.email         = ["apotonick@gmail.com"]
-  spec.license       = "MIT"
+  spec.license       = "LGPL-3.0"
 
   spec.summary       = %q{Loads all concepts files.}
   spec.description   = %q{Loads all Trailblazer concepts files at startup.}
