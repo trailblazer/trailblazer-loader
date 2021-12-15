@@ -1,3 +1,5 @@
+# This gem is deprecated. Don't use it for new projects.
+
 # 0.1.2
 
 * Introduce `Loader#default_circuit` to override specific positions in the loading process. This is a bit hacky and will be

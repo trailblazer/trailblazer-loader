@@ -1,4 +1,5 @@
 # Trailblazer::Loader
+# This gem is deprecated. Don't use it for new projects.
 
 _Generic loader for Trailblazer projects._
 
