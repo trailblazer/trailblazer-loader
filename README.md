@@ -184,9 +184,9 @@ gem 'trailblazer-loader'
 You do not need this step should you use one of the following binding gems.
 
 * [trailblazer-rails](https://github.com/trailblazer/trailblazer-rails)
-* [trailblazer-grape](https://github.com/trailblazer/trailblazer-grape)
-* [trailblazer-roda](https://github.com/trailblazer/trailblazer-roda)
-* [trailblazer-lotus](https://github.com/trailblazer/trailblazer-lotus)
+* trailblazer-grape
+* trailblazer-roda
+* trailblazer-lotus
 
 ## API
 
